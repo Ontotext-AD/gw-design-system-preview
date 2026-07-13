@@ -1,0 +1,269 @@
+<p-toast />
+
+<div class="page">
+  <!-- ===================== Header ===================== -->
+  <header class="page__header">
+    <div class="page__title">
+      <span class="page__logo pi pi-th-large"></span>
+      <div>
+        <h1>{{ title }}</h1>
+        <p>PrimeNG components themed with the <code>graphwise-styleguide</code> tokens (<code>--gw-*</code>).</p>
+      </div>
+    </div>
+    <div class="page__theme">
+      <span class="pi" [class.pi-sun]="!theme.isDark()" [class.pi-moon]="theme.isDark()"></span>
+      <p-tag
+        [value]="theme.isDark() ? 'Dark (OS)' : 'Light (OS)'"
+        [severity]="theme.isDark() ? 'contrast' : 'info'"
+      />
+    </div>
+  </header>
+
+  <!-- ===================== Breadcrumb ===================== -->
+  <section class="section">
+    <h2 class="section__title">Breadcrumb</h2>
+    <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome" />
+  </section>
+
+  <!-- ===================== Buttons & SplitButton ===================== -->
+  <section class="section">
+    <h2 class="section__title">Buttons &amp; Split Button</h2>
+    <div class="row row--wrap">
+      <p-button label="Primary" icon="pi pi-check" (onClick)="save()" />
+      <p-button label="Secondary" severity="secondary" icon="pi pi-cog" />
+      <p-button label="Success" severity="success" icon="pi pi-thumbs-up" />
+      <p-button label="Danger" severity="danger" icon="pi pi-trash" [outlined]="true" />
+      <p-button label="Info" severity="info" [text]="true" />
+      <p-button icon="pi pi-star" [rounded]="true" severity="help" />
+      <p-splitButton label="Save" icon="pi pi-save" [model]="splitItems" (onClick)="save()" />
+    </div>
+  </section>
+
+  <!-- ===================== Select / ToggleSwitch / SelectButton ===================== -->
+  <section class="section">
+    <h2 class="section__title">Form Controls</h2>
+    <div class="row row--wrap">
+      <div class="field">
+        <label>Select a city</label>
+        <p-select
+          [options]="cities"
+          [(ngModel)]="selectedCity"
+          optionLabel="name"
+          placeholder="Choose a city"
+          [showClear]="true"
+          [style]="{ minWidth: '16rem' }"
+        />
+      </div>
+
+      <div class="field">
+        <label>Notifications</label>
+        <div class="row">
+          <p-toggleSwitch [(ngModel)]="notificationsEnabled" />
+          <span>{{ notificationsEnabled ? 'Enabled' : 'Disabled' }}</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>View mode</label>
+        <p-selectButton
+          [options]="viewOptions"
+          [(ngModel)]="selectedView"
+          optionLabel="label"
+          optionValue="value"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Tags & Badges ===================== -->
+  <section class="section">
+    <h2 class="section__title">Tags &amp; Badges</h2>
+    <div class="row row--wrap row--middle">
+      <p-tag value="Primary" />
+      <p-tag value="Success" severity="success" icon="pi pi-check" />
+      <p-tag value="Info" severity="info" />
+      <p-tag value="Warning" severity="warn" icon="pi pi-exclamation-triangle" />
+      <p-tag value="Danger" severity="danger" />
+      <p-tag value="Rounded" [rounded]="true" severity="contrast" />
+
+      <span class="badge-inline">
+        Messages <p-badge value="8" />
+      </span>
+      <span class="badge-inline">
+        Errors <p-badge value="3" severity="danger" />
+      </span>
+
+      <p-overlayBadge value="4" severity="danger">
+        <i class="pi pi-bell" style="font-size: 1.6rem"></i>
+      </p-overlayBadge>
+      <p-overlayBadge value="12" severity="success">
+        <i class="pi pi-envelope" style="font-size: 1.6rem"></i>
+      </p-overlayBadge>
+    </div>
+  </section>
+
+  <!-- ===================== Messages & Toast ===================== -->
+  <section class="section">
+    <h2 class="section__title">Messages &amp; Toast</h2>
+    <div class="stack">
+      <p-message severity="success" text="Repository connected successfully." />
+      <p-message severity="info" text="A new ontology version is available." />
+      <p-message severity="warn" text="Your license expires in 5 days." />
+      <p-message severity="error" text="Failed to reach the SPARQL endpoint." />
+    </div>
+    <div class="row row--wrap" style="margin-top: 1rem">
+      <p-button label="Success toast" severity="success" size="small" (onClick)="showToast('success')" />
+      <p-button label="Info toast" severity="info" size="small" (onClick)="showToast('info')" />
+      <p-button label="Warn toast" severity="warn" size="small" (onClick)="showToast('warn')" />
+      <p-button label="Error toast" severity="danger" size="small" (onClick)="showToast('error')" />
+    </div>
+  </section>
+
+  <!-- ===================== Cards ===================== -->
+  <section class="section">
+    <h2 class="section__title">Cards</h2>
+    <div class="grid">
+      <p-card header="Knowledge Graph" subheader="1.2M triples">
+        <p>
+          A curated enterprise knowledge graph combining internal data sources with public
+          reference ontologies.
+        </p>
+        <ng-template #footer>
+          <div class="row">
+            <p-button label="Open" icon="pi pi-external-link" size="small" />
+            <p-button label="Share" severity="secondary" [outlined]="true" size="small" />
+          </div>
+        </ng-template>
+      </p-card>
+
+      <p-card header="Pipeline Status" subheader="Last run 4 min ago">
+        <div class="stack">
+          <div class="row row--between"><span>Ingestion</span><p-tag value="Done" severity="success" /></div>
+          <div class="row row--between"><span>Enrichment</span><p-tag value="Running" severity="info" /></div>
+          <div class="row row--between"><span>Validation</span><p-tag value="Queued" severity="warn" /></div>
+        </div>
+      </p-card>
+    </div>
+  </section>
+
+  <!-- ===================== Panel & Accordion ===================== -->
+  <section class="section">
+    <h2 class="section__title">Panel &amp; Accordion</h2>
+    <div class="grid">
+      <p-panel header="Repository details" [toggleable]="true">
+        <div class="stack">
+          <div class="row row--between"><span>Type</span><strong>GraphDB</strong></div>
+          <div class="row row--between"><span>Entities</span><strong>842,301</strong></div>
+          <div class="row row--between"><span>Status</span><p-tag value="Active" severity="success" /></div>
+        </div>
+      </p-panel>
+
+      <p-accordion value="0">
+        <p-accordion-panel value="0">
+          <p-accordion-header>What is a knowledge graph?</p-accordion-header>
+          <p-accordion-content>
+            <p>
+              A knowledge graph is a network of real-world entities and the relationships
+              between them, stored in a graph structure.
+            </p>
+          </p-accordion-content>
+        </p-accordion-panel>
+        <p-accordion-panel value="1">
+          <p-accordion-header>What is SPARQL?</p-accordion-header>
+          <p-accordion-content>
+            <p>SPARQL is the standard query language and protocol for RDF graph databases.</p>
+          </p-accordion-content>
+        </p-accordion-panel>
+        <p-accordion-panel value="2">
+          <p-accordion-header>What are ontologies?</p-accordion-header>
+          <p-accordion-content>
+            <p>Ontologies formally define the concepts, properties and relations of a domain.</p>
+          </p-accordion-content>
+        </p-accordion-panel>
+      </p-accordion>
+    </div>
+  </section>
+
+  <!-- ===================== Tree & Splitter ===================== -->
+  <section class="section">
+    <h2 class="section__title">Tree &amp; Splitter</h2>
+    <p-splitter [style]="{ height: '320px' }" [panelSizes]="[40, 60]" styleClass="splitter">
+      <ng-template #panel>
+        <div class="splitter__pane">
+          <p-tree
+            [value]="treeNodes"
+            selectionMode="single"
+            [(selection)]="selectedTreeNode"
+            [style]="{ width: '100%', border: 'none' }"
+          />
+        </div>
+      </ng-template>
+      <ng-template #panel>
+        <div class="splitter__pane splitter__pane--detail">
+          <h3>Selection</h3>
+          @if (selectedTreeNode) {
+            <p-tag [value]="selectedTreeNode.label ?? ''" severity="info" />
+            <p>Selected node key: <code>{{ selectedTreeNode.key }}</code></p>
+          } @else {
+            <p class="muted">Select a node in the tree to see its details here.</p>
+          }
+        </div>
+      </ng-template>
+    </p-splitter>
+  </section>
+
+  <!-- ===================== Skeleton ===================== -->
+  <section class="section">
+    <h2 class="section__title">Skeleton (loading state)</h2>
+    <p-card>
+      @if (loading()) {
+        <div class="skeleton-row">
+          <p-skeleton shape="circle" size="4rem" />
+          <div class="stack" style="flex: 1">
+            <p-skeleton width="60%" height="1.2rem" />
+            <p-skeleton width="90%" />
+            <p-skeleton width="80%" />
+          </div>
+        </div>
+      } @else {
+        <div class="skeleton-row">
+          <span class="pi pi-user avatar"></span>
+          <div class="stack" style="flex: 1">
+            <strong>Ada Lovelace</strong>
+            <span class="muted">Data engineer · Knowledge Graph team</span>
+            <span>Loaded content replaces the skeleton placeholders once ready.</span>
+          </div>
+        </div>
+      }
+    </p-card>
+  </section>
+
+  <!-- ===================== Drawer ===================== -->
+  <section class="section">
+    <h2 class="section__title">Drawer</h2>
+    <p-button label="Open drawer" icon="pi pi-bars" (onClick)="drawerVisible = true" />
+    <p-drawer [(visible)]="drawerVisible" header="Settings" position="right" [style]="{ width: '22rem' }">
+      <div class="stack">
+        <p>Configure your workspace preferences.</p>
+        <div class="field">
+          <label>Default view</label>
+          <p-selectButton
+            [options]="viewOptions"
+            [(ngModel)]="selectedView"
+            optionLabel="label"
+            optionValue="value"
+          />
+        </div>
+        <div class="row">
+          <p-toggleSwitch [(ngModel)]="notificationsEnabled" />
+          <span>Email notifications</span>
+        </div>
+        <p-button label="Save preferences" icon="pi pi-check" (onClick)="save()" />
+      </div>
+    </p-drawer>
+  </section>
+
+  <footer class="page__footer">
+    <p-message severity="secondary" text="Theme follows your operating system's light / dark preference." />
+  </footer>
+</div>

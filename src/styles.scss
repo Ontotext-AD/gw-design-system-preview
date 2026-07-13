@@ -1,0 +1,39 @@
+/* ------------------------------------------------------------------ *
+ * Global styles for gw-design-system-preview
+ * ------------------------------------------------------------------ */
+
+/* PrimeNG icon font */
+@import 'primeicons/primeicons.css';
+
+/*
+ * Graphwise styleguide design tokens.
+ *   - variables-light.css  -> defines every `--gw-*` token on `:root`
+ *   - variables-dark.css   -> overrides them under `:root.dark`
+ * These are imported *unlayered* so they take precedence over PrimeNG's
+ * own generated theme (which is wrapped in the `primeng` cascade layer).
+ */
+@import 'graphwise-styleguide/dist/variables-light.css';
+@import 'graphwise-styleguide/dist/variables-dark.css';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--gw-content-background, var(--gw-body-background, #ffffff));
+  color: var(--gw-text-color, #1f2937);
+  font-family:
+    var(--gw-font-family, 'Inter'),
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
