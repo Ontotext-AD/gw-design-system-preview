@@ -4,6 +4,7 @@
 
 /* PrimeNG icon font */
 @import 'primeicons/primeicons.css';
+@import 'remixicon/fonts/remixicon.css';
 
 /*
  * Graphwise styleguide design tokens.
@@ -18,6 +19,10 @@
 html,
 body {
   height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

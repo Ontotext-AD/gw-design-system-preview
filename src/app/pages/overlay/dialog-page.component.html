@@ -1,0 +1,448 @@
+<article class="doc">
+  <header class="doc__header">
+    <div>
+      <p class="doc__eyebrow">Overlay</p>
+      <h1>Dialog</h1>
+      <p class="doc__lede">
+        Dialogs interrupt the current flow to request information, confirmation, or a decision.
+      </p>
+      <p class="doc__meta">
+        PrimeNG component: <code>{{ componentName }}</code>
+      </p>
+      <p class="doc__meta">
+        Import path: <code>{{ componentImport }}</code>
+      </p>
+    </div>
+  </header>
+
+  <div class="doc__layout">
+    <div class="doc__content">
+      <section id="overview" class="doc__section">
+        <h2>Overview</h2>
+        <p>
+          Dialogs interrupt the current flow to request information, confirmation, or a decision.
+          Use them for focused tasks that require immediate user attention.
+        </p>
+        <ul>
+          <li>PrimeNG component: <code>Dialog</code></li>
+          <li>Import: <code>import &#123; DialogModule &#125; from 'primeng/dialog';</code></li>
+          <li>Selector: <code>p-dialog</code></li>
+        </ul>
+      </section>
+
+      <section id="example" class="doc__section">
+        <h2>Interactive Example</h2>
+        <p-button label="Open dialog" icon="pi pi-external-link" (onClick)="openBasic($event)" />
+
+        <p-dialog
+          header="Save changes"
+          [(visible)]="basicVisible"
+          [modal]="true"
+          [closable]="true"
+          [closeOnEscape]="true"
+          [dismissableMask]="false"
+          [blockScroll]="true"
+          [focusTrap]="true"
+          [style]="{ width: '24rem' }"
+          (onHide)="closeBasic()"
+        >
+          <p id="basic-dialog-copy" class="doc__body-copy">
+            Save your changes to keep the current configuration.
+          </p>
+
+          <ng-template pTemplate="footer">
+            <div class="doc__actions">
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                severity="secondary"
+                [outlined]="true"
+                (click)="closeBasic()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Save changes"
+                icon="pi pi-check"
+                (click)="closeBasic()"
+              ></button>
+            </div>
+          </ng-template>
+        </p-dialog>
+      </section>
+
+      <section id="usage" class="doc__section">
+        <h2>Usage</h2>
+        <h3>Use when</h3>
+        <ul>
+          <li>You need a focused interruption for a single decision or form task.</li>
+          <li>The user must confirm, provide, or review a short amount of information.</li>
+        </ul>
+        <h3>Do not use when</h3>
+        <ul>
+          <li>A full page is a better place for the task.</li>
+          <li>
+            A drawer, popover, inline validation, or message can communicate the state more lightly.
+          </li>
+          <li>The flow requires multiple steps or long-form content.</li>
+        </ul>
+      </section>
+
+      <section id="anatomy" class="doc__section">
+        <h2>Anatomy</h2>
+        <div class="anatomy">
+          @for (item of anatomyItems; track item) {
+            <div class="anatomy__item">
+              <span class="anatomy__dot" aria-hidden="true"></span>
+              <span>{{ item }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section id="variants" class="doc__section">
+        <h2>Variants</h2>
+        <div class="variant-grid">
+          <article class="variant-card">
+            <h3>Basic modal</h3>
+            <p>{{ variantNotes.basic }}</p>
+            <p-button label="Open" severity="secondary" (onClick)="openBasic($event)" />
+          </article>
+
+          <article class="variant-card">
+            <h3>Confirmation dialog</h3>
+            <p>{{ variantNotes.confirm }}</p>
+            <p-button label="Confirm" severity="secondary" (onClick)="openConfirm($event)" />
+          </article>
+
+          <article class="variant-card">
+            <h3>Long-content dialog</h3>
+            <p>{{ variantNotes.long }}</p>
+            <p-button label="View long content" severity="secondary" (onClick)="openLong($event)" />
+          </article>
+
+          <article class="variant-card">
+            <h3>Maximizable dialog</h3>
+            <p>{{ variantNotes.max }}</p>
+            <p-button label="Open maximizable" severity="secondary" (onClick)="openMax($event)" />
+          </article>
+
+          <article class="variant-card">
+            <h3>Responsive dialog</h3>
+            <p>{{ variantNotes.responsive }}</p>
+            <p-button
+              label="Open responsive"
+              severity="secondary"
+              (onClick)="openResponsive($event)"
+            />
+          </article>
+        </div>
+
+        <p-dialog
+          header="Confirmation"
+          [(visible)]="confirmVisible"
+          [modal]="true"
+          [closable]="true"
+          [closeOnEscape]="true"
+          [dismissableMask]="false"
+          [blockScroll]="true"
+          [focusTrap]="true"
+          [style]="{ width: '22rem' }"
+          (onHide)="closeConfirm()"
+        >
+          <p>Are you sure you want to continue?</p>
+          <ng-template pTemplate="footer">
+            <div class="doc__actions">
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                severity="secondary"
+                [outlined]="true"
+                (click)="closeConfirm()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Continue"
+                icon="pi pi-check"
+                (click)="closeConfirm()"
+              ></button>
+            </div>
+          </ng-template>
+        </p-dialog>
+
+        <p-dialog
+          header="Release notes"
+          [(visible)]="longVisible"
+          [modal]="true"
+          [closable]="true"
+          [closeOnEscape]="true"
+          [dismissableMask]="false"
+          [blockScroll]="true"
+          [focusTrap]="true"
+          [style]="{ width: '32rem' }"
+          [contentStyle]="{ maxHeight: '18rem' }"
+          (onHide)="closeLong()"
+        >
+          <div class="doc__long-content">
+            <p>Use dialogs for short, focused tasks.</p>
+            <p>When content grows, internal scrolling keeps the overlay usable.</p>
+            <p>
+              Avoid placing full workflows inside a dialog. Long forms, multi-step tasks, and dense
+              reference material usually belong on a page or in a drawer.
+            </p>
+            <p>
+              This example keeps the dialog open while users read more content, but the layout
+              remains bounded and scrollable inside the component.
+            </p>
+            <p>Background scroll is blocked while the modal dialog is open.</p>
+          </div>
+          <ng-template pTemplate="footer">
+            <div class="doc__actions">
+              <button
+                pButton
+                type="button"
+                label="Close"
+                severity="secondary"
+                [outlined]="true"
+                (click)="closeLong()"
+              ></button>
+            </div>
+          </ng-template>
+        </p-dialog>
+
+        <p-dialog
+          header="Maximizable dialog"
+          [(visible)]="maxVisible"
+          [modal]="true"
+          [closable]="true"
+          [closeOnEscape]="true"
+          [dismissableMask]="false"
+          [blockScroll]="true"
+          [focusTrap]="true"
+          [maximizable]="true"
+          [style]="{ width: '28rem' }"
+          (onHide)="closeMax()"
+        >
+          <p>Use the maximize button in the header to expand the dialog within the viewport.</p>
+          <div class="doc__stack">
+            <p>Maximize is supported by the installed PrimeNG Dialog.</p>
+            <p>Restore closes the maximized state and returns the dialog to its previous size.</p>
+          </div>
+          <ng-template pTemplate="footer">
+            <div class="doc__actions">
+              <button
+                pButton
+                type="button"
+                label="Close"
+                severity="secondary"
+                [outlined]="true"
+                (click)="closeMax()"
+              ></button>
+            </div>
+          </ng-template>
+        </p-dialog>
+
+        <p-dialog
+          header="Responsive width"
+          [(visible)]="responsiveVisible"
+          [modal]="true"
+          [closable]="true"
+          [closeOnEscape]="true"
+          [dismissableMask]="false"
+          [blockScroll]="true"
+          [focusTrap]="true"
+          [breakpoints]="responsiveBreakpoints"
+          [style]="{ width: '40rem' }"
+          [maximizable]="true"
+          [styleClass]="responsiveMaximized ? 'doc-dialog doc-dialog--maximized' : 'doc-dialog'"
+          (onHide)="closeResponsive()"
+          (onMaximize)="maximizeResponsive()"
+        >
+          <p>
+            The dialog uses the installed <code>breakpoints</code> input so it stays readable on
+            tablet and mobile widths.
+          </p>
+          <ng-template pTemplate="footer">
+            <div class="doc__actions">
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                severity="secondary"
+                [outlined]="true"
+                (click)="closeResponsive()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Apply"
+                icon="pi pi-check"
+                (click)="closeResponsive()"
+              ></button>
+            </div>
+          </ng-template>
+        </p-dialog>
+      </section>
+
+      <section id="size" class="doc__section">
+        <h2>Size</h2>
+        <ul>
+          <li>Prefer content-driven widths and keep dialogs narrow enough to scan quickly.</li>
+          <li>Use sensible min/max widths so content does not stretch unnecessarily.</li>
+          <li>Avoid full-screen dialogs unless the task genuinely requires it.</li>
+          <li>
+            On mobile, use responsive widths so the overlay remains usable without forcing a desktop
+            layout.
+          </li>
+        </ul>
+      </section>
+
+      <section id="content" class="doc__section">
+        <h2>Content Guidelines</h2>
+        <ul>
+          <li>Keep titles short and specific.</li>
+          <li>Keep the dialog focused on one task.</li>
+          <li>Use clear action labels rather than generic labels such as "Yes".</li>
+          <li>Avoid large amounts of content.</li>
+          <li>Avoid complex multi-step flows inside a dialog.</li>
+        </ul>
+      </section>
+
+      <section id="actions" class="doc__section">
+        <h2>Actions</h2>
+        <ul>
+          <li>Use one clear primary action.</li>
+          <li>Provide Cancel when dismissal is valid.</li>
+          <li>Distinguish destructive actions clearly.</li>
+          <li>Avoid multiple competing primary actions.</li>
+          <li>Prevent accidental destructive confirmation.</li>
+        </ul>
+      </section>
+
+      <section id="behavior" class="doc__section">
+        <h2>Behavior</h2>
+        <ul>
+          <li>Opening and closing are controlled by the bound `visible` state.</li>
+          <li>The close button is shown when `closable` is enabled.</li>
+          <li>Escape closes the dialog when `closeOnEscape` is enabled.</li>
+          <li>Backdrop click only closes when `dismissableMask` is enabled.</li>
+          <li>Background scrolling is blocked when `blockScroll` is enabled.</li>
+          <li>Maximization is available when `maximizable` is enabled.</li>
+          <li>Set `dismissableMask` carefully for destructive flows.</li>
+          <li>Avoid nested dialogs when a drawer, page, or inline pattern is better suited.</li>
+        </ul>
+      </section>
+
+      <section id="keyboard-focus" class="doc__section">
+        <h2>Keyboard and Focus</h2>
+        <ul>
+          <li>
+            Initial focus goes into the dialog when it opens because focus-on-show is enabled by
+            default.
+          </li>
+          <li>
+            Tab and Shift+Tab remain trapped inside the dialog when focus trapping is enabled.
+          </li>
+          <li>Escape closes the dialog when supported by the current configuration.</li>
+          <li>Focus returns to the trigger after closing in this page.</li>
+          <li>Visible focus states are preserved through the existing design system tokens.</li>
+          <li>Tab order follows the dialog header, content, and footer controls.</li>
+        </ul>
+      </section>
+
+      <section id="responsive" class="doc__section">
+        <h2>Responsive Behavior</h2>
+        <ul>
+          <li>Desktop: wider modal content can use a fixed content width.</li>
+          <li>Tablet: breakpoints reduce the dialog width.</li>
+          <li>Mobile: the overlay becomes narrow enough to stay within the viewport.</li>
+        </ul>
+        <p>
+          Supported breakpoint example:
+          <code>{{ responsiveBreakpoints | json }}</code>
+        </p>
+      </section>
+
+      <section id="accessibility" class="doc__section">
+        <h2>Accessibility</h2>
+        <ul>
+          <li>The dialog needs a clear accessible name via its title.</li>
+          <li>The title is associated with the dialog by the component's aria labeling.</li>
+          <li>Buttons use meaningful labels.</li>
+          <li>Keyboard operation is supported through focus trapping and Escape handling.</li>
+          <li>Screen-reader context should make the dialog purpose obvious.</li>
+          <li>Focus visibility should remain obvious in all theme modes.</li>
+          <li>Avoid dialogs without a clear purpose.</li>
+        </ul>
+      </section>
+
+      <section id="design-tokens" class="doc__section">
+        <h2>Design Tokens</h2>
+        <ul>
+          <li>Surface/background: Graphwise surface and content background tokens.</li>
+          <li>Text: Graphwise text and muted text tokens.</li>
+          <li>Border: Graphwise border tokens.</li>
+          <li>Shadow: existing Graphwise elevation/shadow tokens where used.</li>
+          <li>Backdrop: Graphwise overlay and neutral surface tokens.</li>
+          <li>Spacing: Graphwise spacing scale.</li>
+          <li>Border radius: Graphwise radius tokens.</li>
+          <li>Actions: Graphwise primary, secondary, and destructive action tokens.</li>
+        </ul>
+      </section>
+
+      <section id="implementation" class="doc__section">
+        <h2>Implementation</h2>
+        <pre><code>import &#123; DialogModule &#125; from 'primeng/dialog';</code></pre>
+        <pre><code>&lt;p-dialog
+  header="Save changes"
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [closeOnEscape]="true"
+  [dismissableMask]="false"
+  [blockScroll]="true"
+  [focusTrap]="true"
+&gt;
+  ...
+&lt;/p-dialog&gt;</code></pre>
+        <p>Minimal state for this page:</p>
+        <pre><code>visible = false;
+
+open(): void &#123; this.visible = true; &#125;
+close(): void &#123; this.visible = false; &#125;</code></pre>
+      </section>
+
+      <section id="related-components" class="doc__section">
+        <h2>Related Components</h2>
+        <ul>
+          <li>ConfirmDialog</li>
+          <li>Drawer</li>
+          <li>Popover</li>
+          <li>Inline messages or validation</li>
+        </ul>
+      </section>
+    </div>
+
+    <nav class="doc__toc" aria-label="On-page table of contents">
+      <h2 class="doc__toc-title">On this page</h2>
+      <a href="#overview">Overview</a>
+      <a href="#example">Interactive Example</a>
+      <a href="#usage">Usage</a>
+      <a href="#anatomy">Anatomy</a>
+      <a href="#variants">Variants</a>
+      <a href="#size">Size</a>
+      <a href="#content">Content</a>
+      <a href="#actions">Actions</a>
+      <a href="#behavior">Behavior</a>
+      <a href="#keyboard-focus">Keyboard and Focus</a>
+      <a href="#responsive">Responsive Behavior</a>
+      <a href="#accessibility">Accessibility</a>
+      <a href="#design-tokens">Design Tokens</a>
+      <a href="#implementation">Implementation</a>
+      <a href="#related-components">Related Components</a>
+    </nav>
+  </div>
+</article>
