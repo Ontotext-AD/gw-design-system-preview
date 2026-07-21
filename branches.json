@@ -1,6 +1,15 @@
 {
   "branches": [
     {
+      "name": "doni/ds-documentation",
+      "dir": "doni-ds-documentation",
+      "sha": "3e7859e",
+      "shaFull": "3e7859e2cea1cf2b7c18c6b518f9966e9eea221a",
+      "date": "2026-07-21T14:12:45Z",
+      "actor": "yordanalexandrov",
+      "runUrl": "https://github.com/Ontotext-AD/gw-design-system-preview/actions/runs/29837990167"
+    },
+    {
       "name": "main",
       "dir": "main",
       "sha": "6285d31",
