@@ -1,0 +1,175 @@
+name: Deploy branch preview
+
+# Manually deploy (or remove) a per-branch preview of the app to GitHub Pages.
+# Pick the branch from the native "Use workflow from" dropdown when running.
+# Each branch is published under branches/<name>/ on the gh-pages branch, so
+# many branches coexist. A landing page at the root lists them all.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Deploy the selected branch, or remove its preview
+        type: choice
+        options:
+          - deploy
+          - remove
+        default: deploy
+      branch:
+        description: >-
+          Advanced: override target branch (leave empty to use the branch
+          selected above). Mainly for removing a preview of a deleted branch.
+        type: string
+        required: false
+        default: ''
+
+# Serialize writes to the gh-pages branch so concurrent runs can't clobber
+# each other. Do not cancel an in-progress publish.
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+
+      - name: Resolve target branch
+        env:
+          INPUT_BRANCH: ${{ inputs.branch }}
+          REF_NAME: ${{ github.ref_name }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          TARGET="${INPUT_BRANCH:-$REF_NAME}"
+          if [ -z "$TARGET" ]; then
+            echo "::error::Could not determine a target branch."
+            exit 1
+          fi
+          # Deploy requires the branch to exist; remove may target a deleted one.
+          if [ "$MODE" = "deploy" ]; then
+            if ! git ls-remote --exit-code --heads origin "$TARGET" >/dev/null 2>&1; then
+              echo "::error::Branch '$TARGET' does not exist on origin."
+              exit 1
+            fi
+          fi
+          DIR="$(printf '%s' "$TARGET" | sed 's/[^A-Za-z0-9._-]/-/g')"
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          echo "TARGET=$TARGET" >> "$GITHUB_ENV"
+          echo "DIR=$DIR" >> "$GITHUB_ENV"
+          echo "REPO_NAME=$REPO_NAME" >> "$GITHUB_ENV"
+          echo "Target branch: $TARGET  ->  branches/$DIR/  (mode: $MODE)"
+
+      - name: Setup Node
+        if: ${{ inputs.mode == 'deploy' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Build app
+        if: ${{ inputs.mode == 'deploy' }}
+        run: |
+          set -euo pipefail
+          npm ci
+          npx ng build --configuration production \
+            --base-href "/$REPO_NAME/branches/$DIR/"
+
+      - name: Publish to gh-pages
+        env:
+          MODE: ${{ inputs.mode }}
+          GH_TOKEN: ${{ github.token }}
+          ACTOR: ${{ github.actor }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          GHP_DIR="$RUNNER_TEMP/gh-pages"
+          REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Clone existing gh-pages, or start a fresh orphan branch.
+          if git ls-remote --exit-code --heads "$REMOTE" gh-pages >/dev/null 2>&1; then
+            git clone --depth 1 --branch gh-pages "$REMOTE" "$GHP_DIR"
+          else
+            echo "gh-pages branch not found - creating it."
+            git clone --depth 1 "$REMOTE" "$GHP_DIR"
+            git -C "$GHP_DIR" checkout --orphan gh-pages
+            git -C "$GHP_DIR" rm -rf . >/dev/null 2>&1 || true
+          fi
+
+          # Disable Jekyll so files/dirs are served verbatim (e.g. _-prefixed).
+          touch "$GHP_DIR/.nojekyll"
+
+          GEN="$GITHUB_WORKSPACE/.github/scripts/build-landing.mjs"
+
+          if [ "$MODE" = "deploy" ]; then
+            rm -rf "${GHP_DIR:?}/branches/$DIR"
+            mkdir -p "$GHP_DIR/branches/$DIR"
+            cp -R dist/gw-design-system-preview/browser/. "$GHP_DIR/branches/$DIR/"
+            node "$GEN" upsert \
+              --dir "$DIR" \
+              --name "$TARGET" \
+              --sha "$COMMIT_SHA" \
+              --date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              --actor "$ACTOR" \
+              --run-url "$RUN_URL" \
+              --manifest "$GHP_DIR/branches.json" \
+              --out "$GHP_DIR/index.html"
+          else
+            rm -rf "${GHP_DIR:?}/branches/$DIR"
+            node "$GEN" remove \
+              --dir "$DIR" \
+              --manifest "$GHP_DIR/branches.json" \
+              --out "$GHP_DIR/index.html"
+          fi
+
+          cd "$GHP_DIR"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+            exit 0
+          fi
+          git commit -m "${MODE} preview for ${TARGET} (${COMMIT_SHA:0:7})"
+
+          # Push with a small retry in case another run slipped in.
+          for attempt in 1 2 3; do
+            if git push origin gh-pages; then
+              echo "Published."
+              break
+            fi
+            echo "Push failed (attempt $attempt) - syncing and retrying."
+            git fetch origin gh-pages
+            git rebase origin/gh-pages || { git rebase --abort || true; }
+            sleep $((attempt * 3))
+            if [ "$attempt" = 3 ]; then
+              echo "::error::Could not push to gh-pages after 3 attempts."
+              exit 1
+            fi
+          done
+
+      - name: Summary
+        if: ${{ always() }}
+        env:
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          PAGES_ROOT="https://${GITHUB_REPOSITORY_OWNER}.github.io/${REPO_NAME}"
+          {
+            echo "### Branch preview: \`${TARGET}\` (${MODE})"
+            echo ""
+            if [ "$MODE" = "deploy" ]; then
+              echo "- Preview: ${PAGES_ROOT}/branches/${DIR}/"
+            else
+              echo "- Removed \`branches/${DIR}/\`"
+            fi
+            echo "- Landing page: ${PAGES_ROOT}/"
+          } >> "$GITHUB_STEP_SUMMARY"

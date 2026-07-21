@@ -52,6 +52,41 @@ npm run build    # or: ng build
 
 Build artifacts are written to `dist/`.
 
+## Branch preview deployments (GitHub Pages)
+
+Any branch can be published on demand to GitHub Pages, and several branches can
+coexist — each under its own URL — with a landing page listing them all.
+
+**Live URLs**
+
+- Landing page: <https://ontotext-ad.github.io/gw-design-system-preview/>
+- A branch preview: `…/gw-design-system-preview/branches/<branch>/`
+
+**Deploy or remove a branch**
+
+1. Go to **Actions → Deploy branch preview → Run workflow**.
+2. In **Use workflow from**, pick the branch you want to publish.
+3. Choose **mode**:
+   - `deploy` — build the selected branch and publish it (re-running for the
+     same branch overwrites it).
+   - `remove` — delete that branch's preview and drop it from the landing page.
+4. Run it. The run summary links to the resulting URLs.
+
+> The workflow runs the version of `.github/workflows/deploy-preview.yml` that
+> lives on the selected branch, so a branch can only be deployed from the
+> dropdown once it contains this workflow (branches cut from `main` inherit it).
+> To remove a preview of an already-deleted branch, run from `main` and type the
+> old branch name into the optional **branch** field.
+
+**How it works** — the workflow builds with
+`--base-href /gw-design-system-preview/branches/<branch>/` and pushes the output
+into `branches/<branch>/` on the `gh-pages` branch (other branches are left
+untouched). `.github/scripts/build-landing.mjs` maintains `branches.json` and
+regenerates the landing `index.html` on every run.
+
+**One-time setup** (once `gh-pages` exists after the first run): in
+**Settings → Pages**, set **Source: Deploy from a branch → `gh-pages` / `/ (root)`**.
+
 ## Key dependencies
 
 | Package                | Version |
