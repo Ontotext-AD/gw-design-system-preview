@@ -33,6 +33,7 @@ interface NavGroup {
 })
 export class App implements OnInit {
   protected readonly theme = inject(ThemeService);
+  protected readonly homeUrl = 'https://ontotext-ad.github.io/gw-design-system-preview/';
   protected readonly themeOptions: ThemeOption[] = [
     { label: 'Light (OS)', value: 'os' },
     { label: 'Light', value: 'light' },

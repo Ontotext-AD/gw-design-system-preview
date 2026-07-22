@@ -40,6 +40,9 @@
 
 .shell__brand-text {
   font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--gw-text-color, #111827);
+  margin-left: 0.25rem;
 }
 
 .shell__nav {
@@ -128,7 +131,7 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 1.5rem 0;
+  padding: 1.5rem 3rem;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--gw-border-color-subtle, #e5e7eb);
 }
@@ -152,6 +155,10 @@
 }
 
 .page__logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  line-height: 1;
   font-size: 2rem;
   color: var(--gw-primary-base, var(--gw-primary-color, #4b22d3));
 }
