@@ -1,6 +1,15 @@
 {
   "branches": [
     {
+      "name": "doni/styleguide-validation",
+      "dir": "doni-styleguide-validation",
+      "sha": "f62624f",
+      "shaFull": "f62624fc8c4f908265c3e83ab695f2a5606dcc66",
+      "date": "2026-07-30T07:16:27Z",
+      "actor": "yordanalexandrov",
+      "runUrl": "https://github.com/Ontotext-AD/gw-design-system-preview/actions/runs/30522354656"
+    },
+    {
       "name": "doni/ds-documentation",
       "dir": "doni-ds-documentation",
       "sha": "3e7859e",
